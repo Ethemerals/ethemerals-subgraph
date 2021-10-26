@@ -1,0 +1,117 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Ethemerals
+    network: mainnet
+    source:
+      address: '0xeE8C0131aa6B66A2CE3cad6D2A039c1473a79a6d'
+      abi: Ethemerals
+      startBlock: 13297800
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Core
+        - Delegate
+        - Ethemeral
+        - Metadata
+        - Scorecard
+        - Account
+        - CoreAction
+        - DelegateAction
+        - EthemeralAction
+        - AccountAction
+        - Transaction
+      abis:
+        - name: Ethemerals
+          file: ./abis/Ethemerals.json
+      eventHandlers:
+        - event: AllowDelegatesChange(indexed address,bool)
+          handler: handleAllowDelegatesChange
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: ChangeRewards(uint256,uint32,bool,uint8)
+          handler: handleChangeRewards
+        - event: ChangeScore(uint256,uint16,bool,uint32)
+          handler: handleChangeScore
+        - event: DelegateChange(indexed address,bool)
+          handler: handleDelegateChange
+        - event: Mint(uint256,uint16,uint16,uint16,uint16)
+          handler: handleMint
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: PriceChange(uint256)
+          handler: handlePriceChange
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mappings/core.ts
+
+  # ELF
+  - kind: ethereum/contract
+    name: EthemeralLifeForce
+    network: mainnet
+    source:
+      address: '0x5900f8d3d9Fc8425c6DC22b5bda71a1e0E594135'
+      abi: EthemeralLifeForce
+      startBlock: 13297800
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - Transfer
+      abis:
+        - name: EthemeralLifeForce
+          file: ./abis/EthemeralLifeForce.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/mappings/ELF.ts
+
+  # EQUIPABLES
+  - kind: ethereum/contract
+    name: EthemeralEquipables
+    network: mainnet
+    source:
+      address: '0x61493114836bb14dae7a57be93de2eee95327092'
+      abi: EthemeralEquipables
+      startBlock: 13297800
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Pet
+        - PetMetadata
+        - Item
+        - ItemMetadata
+        - Account
+        - AccountAction
+        - Delegate
+        - DelegateAction
+        - Transaction
+      abis:
+        - name: EthemeralEquipables
+          file: ./abis/EthemeralEquipables.json
+      eventHandlers:
+        - event: AllowDelegatesChange(indexed address,bool)
+          handler: handleAllowDelegatesChange
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: DelegateChange(indexed address,bool)
+          handler: handleDelegateChange
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mappings/equipables.ts

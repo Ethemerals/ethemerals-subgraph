@@ -1,0 +1,16 @@
+build/
+node_modules/
+src/types/
+.DS_STORE
+yarn-error.log
+metadataStats.ts
+meralBonusStats.ts
+meralTraits.ts
+tokenToRanks.ts
+src/metadata/
+
+
+# 1042
+# 2499
+# 2135
+# 2603

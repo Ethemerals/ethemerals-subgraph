@@ -1,0 +1,252 @@
+##############################
+##   MAIN ENTITIES          ##
+##############################
+
+type Core @entity {
+	id: ID!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	owner: Bytes!
+	mintPrice: BigInt!
+	maxAvailableIndex: BigInt
+	ethemeralSupply: BigInt
+}
+
+type Delegate @entity {
+	id: ID!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	active: Boolean!
+	actions: [DelegateAction!] @derivedFrom(field: "delegate")
+}
+
+type Ethemeral @entity {
+	id: ID!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	creator: Account!
+	owner: Account!
+	previousOwner: Account!
+	score: BigInt!
+	rewards: BigInt!
+	atk: BigInt!
+	def: BigInt!
+	spd: BigInt!
+	atkBonus: BigInt!
+	defBonus: BigInt!
+	spdBonus: BigInt!
+	baseId: BigInt!
+	edition: BigInt
+	bgId: BigInt!
+	petRedeemed: Boolean!
+	scorecard: Scorecard!
+	metadata: Metadata!
+	actions: [EthemeralAction!] @derivedFrom(field: "ethemeral")
+}
+
+type Metadata @entity {
+	id: ID!
+	ethemerals: [Ethemeral!] @derivedFrom(field: "metadata")
+	editionCount: BigInt!
+	coin: String!
+	artist: String!
+	mainClass: String!
+	subClass: String!
+	special1: Int!
+	special2: String!
+	hair: String!
+	eyes: String!
+	skin: String!
+	costume: String!
+}
+
+type Scorecard @entity {
+	id: ID!
+	ethemeral: Ethemeral!
+	highestScore: BigInt!
+	highestRewards: BigInt!
+	battles: BigInt!
+	wins: BigInt!
+	revived: BigInt!
+	reviver: BigInt!
+	resurrected: BigInt!
+	reaped: BigInt!
+	reaper: BigInt!
+	drained: BigInt!
+}
+
+type Account @entity {
+	id: ID!
+	elfBalance: BigInt!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	allowDelegates: Boolean!
+	ethemerals: [Ethemeral!] @derivedFrom(field: "owner")
+	created: [Ethemeral!] @derivedFrom(field: "creator")
+	pets: [Pet!] @derivedFrom(field: "owner")
+	createdPets: [Pet!] @derivedFrom(field: "creator")
+	items: [Item!] @derivedFrom(field: "owner")
+	createdItems: [Item!] @derivedFrom(field: "creator")
+	actions: [AccountAction!] @derivedFrom(field: "account")
+}
+
+##############################
+##         Actions          ##
+##############################
+
+type CoreAction @entity {
+	id: ID!
+	timestamp: BigInt!
+	transaction: Transaction!
+	type: CoreActionType!
+}
+
+type DelegateAction @entity {
+	id: ID!
+	delegate: Delegate!
+	timestamp: BigInt!
+	transaction: Transaction!
+	type: DelegateActionType!
+}
+
+type EthemeralAction @entity {
+	id: ID!
+	ethemeral: Ethemeral!
+	score: BigInt
+	win: Boolean
+	rewards: BigInt
+	staked: Boolean
+	priceFeed: BigInt
+	long: Boolean
+	timestamp: BigInt!
+	transaction: Transaction!
+	type: ActionType!
+}
+
+type AccountAction @entity {
+	id: ID!
+	account: Account!
+	ethemeral: Ethemeral
+	pet: Pet
+	item: Item
+	timestamp: BigInt!
+	transaction: Transaction!
+	type: ActionType!
+}
+
+##############################
+##         EQUIPABLES       ##
+##############################
+
+type Pet @entity {
+	id: ID!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	creator: Account!
+	owner: Account!
+	previousOwner: Account!
+	baseId: BigInt!
+	edition: BigInt
+	atk: BigInt!
+	def: BigInt!
+	spd: BigInt!
+	rarity: BigInt!
+	metadata: PetMetadata!
+}
+
+type PetMetadata @entity {
+	id: ID!
+	pets: [Pet!] @derivedFrom(field: "metadata")
+	editionCount: BigInt!
+	name: String!
+}
+
+type PetAction @entity {
+	id: ID!
+	pet: Pet!
+	timestamp: BigInt!
+	transaction: Transaction!
+	type: ActionType!
+}
+
+type Item @entity {
+	id: ID!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	creator: Account!
+	owner: Account!
+	previousOwner: Account!
+	baseId: BigInt!
+	edition: BigInt
+	atk: BigInt!
+	def: BigInt!
+	spd: BigInt!
+	rarity: BigInt!
+	metadata: ItemMetadata!
+}
+
+type ItemMetadata @entity {
+	id: ID!
+	items: [Item!] @derivedFrom(field: "metadata")
+	editionCount: BigInt!
+	name: String!
+}
+
+type ItemAction @entity {
+	id: ID!
+	item: Item!
+	timestamp: BigInt
+	transaction: Transaction!
+	type: ActionType!
+}
+
+##############################
+##         Enums            ##
+##############################
+
+enum CoreActionType {
+	Default
+	OwnershipTransferred
+	ETHPriceChange
+	ELFPriceChange
+	ChangeScore
+}
+
+enum DelegateActionType {
+	Default
+	DelegateChange
+}
+
+enum ActionType {
+	Default
+	Minted
+	Transfer
+	SendELF
+	ReceiveELF
+	Send
+	Receive
+	Staked
+	Unstaked
+	Revived
+	Reviver
+	Reaped
+	Reaper
+	RedeemELF
+	RedeemPet
+	RedeemHonor
+	Resurrection
+	DelegateChange
+}
+
+##############################
+##         Low Level        ##
+##############################
+
+type Transaction @entity {
+	id: ID!
+	from: Bytes!
+	to: Bytes
+	value: BigInt!
+	timestamp: BigInt!
+	block: BigInt!
+}

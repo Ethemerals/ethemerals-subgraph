@@ -185,8 +185,6 @@ export function handleMint(event: Mint): void {
 		token.spdBonus = BigInt.fromI32(statData[2]).minus(BigInt.fromI32(200));
 	}
 	if (metadata.subClass == 'Berserker') {
-		token.atk = BigInt.fromI32(event.params.atk).plus(BigInt.fromI32(100));
-		token.spd = BigInt.fromI32(event.params.spd).plus(BigInt.fromI32(100));
 		token.atkBonus = BigInt.fromI32(statData[0]).minus(BigInt.fromI32(100));
 		token.defBonus = BigInt.fromI32(statData[1]);
 		token.spdBonus = BigInt.fromI32(statData[2]).minus(BigInt.fromI32(100));

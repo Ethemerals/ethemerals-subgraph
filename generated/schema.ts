@@ -221,6 +221,7 @@ export class Ethemeral extends Entity {
     this.set("spdBonus", Value.fromBigInt(BigInt.zero()));
     this.set("baseId", Value.fromBigInt(BigInt.zero()));
     this.set("bgId", Value.fromBigInt(BigInt.zero()));
+    this.set("coin", Value.fromString(""));
     this.set("petRedeemed", Value.fromBoolean(false));
     this.set("scorecard", Value.fromString(""));
     this.set("metadata", Value.fromString(""));
@@ -402,6 +403,15 @@ export class Ethemeral extends Entity {
 
   set bgId(value: BigInt) {
     this.set("bgId", Value.fromBigInt(value));
+  }
+
+  get coin(): string {
+    let value = this.get("coin");
+    return value!.toString();
+  }
+
+  set coin(value: string) {
+    this.set("coin", Value.fromString(value));
   }
 
   get petRedeemed(): boolean {

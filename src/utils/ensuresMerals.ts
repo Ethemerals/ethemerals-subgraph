@@ -36,6 +36,7 @@ export function ensureEthemeral(event: ethereum.Event, tokenId: BigInt): Ethemer
 	ethemeral.spdBonus = ZERO_BI;
 	ethemeral.baseId = BigInt.fromI32(rankData[0]);
 	ethemeral.bgId = BigInt.fromI32(rankData[1]);
+	ethemeral.coin = metaCoinName[rankData[0]];
 	ethemeral.petRedeemed = false;
 	ethemeral.scorecard = ensureScorecard(ethemeral.id).id;
 	ethemeral.metadata = ensureMetadata(BigInt.fromI32(rankData[0])).id;

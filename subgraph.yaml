@@ -115,3 +115,41 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/mappings/equipables.ts
+
+  # ETERNAL BATTLE
+  - kind: ethereum/contract
+    name: EternalBattle
+    network: mainnet
+    source:
+      address: '0x169310e61e71ef5834ce5466c7155d8a90d15f1e'
+      abi: EternalBattle
+      startBlock: 13571525
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Core
+        - Delegate
+        - Ethemeral
+        - Metadata
+        - Scorecard
+        - Account
+        - CoreAction
+        - DelegateAction
+        - EthemeralAction
+        - AccountAction
+        - Transaction
+      abis:
+        - name: EternalBattle
+          file: ./abis/EternalBattle.json
+      eventHandlers:
+        - event: OwnershipTransferred(address,address)
+          handler: handleOwnershipTransferred
+        - event: StakeCanceled(indexed uint256,bool)
+          handler: handleStakeCanceled
+        - event: StakeCreated(indexed uint256,uint256,bool)
+          handler: handleStakeCreated
+        - event: TokenRevived(indexed uint256,uint256)
+          handler: handleTokenRevived
+      file: ./src/mappings/eternalBattle.ts

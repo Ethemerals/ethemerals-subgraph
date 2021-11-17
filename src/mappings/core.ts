@@ -43,11 +43,13 @@ export function handleAllowDelegatesChange(event: AllowDelegatesChange): void {
 
 export function handleDelegateChange(event: DelegateChange): void {
 	let delegate = ensureDelegate(event, addressId(event.params.delegate));
+	let account = ensureAccount(event, addressId(event.params.delegate));
 	let delegateAction = ensureDelegateAction(event, delegate.id);
 	delegateAction.type = 'DelegateChange';
 	delegate.active = event.params.add;
 	delegateAction.save();
 	delegate.save();
+	account.save();
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {

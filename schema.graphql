@@ -38,6 +38,7 @@ type Ethemeral @entity {
 	baseId: BigInt!
 	edition: BigInt
 	bgId: BigInt!
+	coin: String!
 	petRedeemed: Boolean!
 	scorecard: Scorecard!
 	metadata: Metadata!

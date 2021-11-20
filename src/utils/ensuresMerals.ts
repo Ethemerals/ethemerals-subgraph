@@ -37,6 +37,15 @@ export function ensureEthemeral(event: ethereum.Event, tokenId: BigInt): Ethemer
 	ethemeral.baseId = BigInt.fromI32(rankData[0]);
 	ethemeral.bgId = BigInt.fromI32(rankData[1]);
 	ethemeral.coin = metaCoinName[rankData[0]];
+
+	let metadata = meralTraits[rankData[0]];
+	ethemeral.mainClass = metaMainclass[metadata[1]];
+	ethemeral.subClass = metaSubclass[metadata[1]][metadata[2]];
+	ethemeral.hair = metaColors[metadata[4]];
+	ethemeral.eyes = metaColors[metadata[5]];
+	ethemeral.skin = metaColors[metadata[6]];
+	ethemeral.costume = metaCostumes[metadata[7]];
+
 	ethemeral.petRedeemed = false;
 	ethemeral.scorecard = ensureScorecard(ethemeral.id).id;
 	ethemeral.metadata = ensureMetadata(BigInt.fromI32(rankData[0])).id;

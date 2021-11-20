@@ -222,6 +222,12 @@ export class Ethemeral extends Entity {
     this.set("baseId", Value.fromBigInt(BigInt.zero()));
     this.set("bgId", Value.fromBigInt(BigInt.zero()));
     this.set("coin", Value.fromString(""));
+    this.set("mainClass", Value.fromString(""));
+    this.set("subClass", Value.fromString(""));
+    this.set("hair", Value.fromString(""));
+    this.set("eyes", Value.fromString(""));
+    this.set("skin", Value.fromString(""));
+    this.set("costume", Value.fromString(""));
     this.set("petRedeemed", Value.fromBoolean(false));
     this.set("scorecard", Value.fromString(""));
     this.set("metadata", Value.fromString(""));
@@ -412,6 +418,60 @@ export class Ethemeral extends Entity {
 
   set coin(value: string) {
     this.set("coin", Value.fromString(value));
+  }
+
+  get mainClass(): string {
+    let value = this.get("mainClass");
+    return value!.toString();
+  }
+
+  set mainClass(value: string) {
+    this.set("mainClass", Value.fromString(value));
+  }
+
+  get subClass(): string {
+    let value = this.get("subClass");
+    return value!.toString();
+  }
+
+  set subClass(value: string) {
+    this.set("subClass", Value.fromString(value));
+  }
+
+  get hair(): string {
+    let value = this.get("hair");
+    return value!.toString();
+  }
+
+  set hair(value: string) {
+    this.set("hair", Value.fromString(value));
+  }
+
+  get eyes(): string {
+    let value = this.get("eyes");
+    return value!.toString();
+  }
+
+  set eyes(value: string) {
+    this.set("eyes", Value.fromString(value));
+  }
+
+  get skin(): string {
+    let value = this.get("skin");
+    return value!.toString();
+  }
+
+  set skin(value: string) {
+    this.set("skin", Value.fromString(value));
+  }
+
+  get costume(): string {
+    let value = this.get("costume");
+    return value!.toString();
+  }
+
+  set costume(value: string) {
+    this.set("costume", Value.fromString(value));
   }
 
   get petRedeemed(): boolean {

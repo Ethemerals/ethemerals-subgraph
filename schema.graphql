@@ -39,6 +39,12 @@ type Ethemeral @entity {
 	edition: BigInt
 	bgId: BigInt!
 	coin: String!
+	mainClass: String!
+	subClass: String!
+	hair: String!
+	eyes: String!
+	skin: String!
+	costume: String!
 	petRedeemed: Boolean!
 	scorecard: Scorecard!
 	metadata: Metadata!

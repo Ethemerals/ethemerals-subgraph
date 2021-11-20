@@ -1390,6 +1390,7 @@ export class Pet extends Entity {
     this.set("def", Value.fromBigInt(BigInt.zero()));
     this.set("spd", Value.fromBigInt(BigInt.zero()));
     this.set("rarity", Value.fromBigInt(BigInt.zero()));
+    this.set("name", Value.fromString(""));
     this.set("metadata", Value.fromString(""));
   }
 
@@ -1524,6 +1525,15 @@ export class Pet extends Entity {
 
   set rarity(value: BigInt) {
     this.set("rarity", Value.fromBigInt(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    return value!.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
   }
 
   get metadata(): string {

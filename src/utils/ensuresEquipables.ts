@@ -70,6 +70,7 @@ export function ensurePet(event: ethereum.Event, tokenId: BigInt): Pet {
 	pet.def = BigInt.fromI32(metaPetStats[pet.baseId.toI32()][1]);
 	pet.spd = BigInt.fromI32(metaPetStats[pet.baseId.toI32()][2]);
 	pet.rarity = BigInt.fromI32(metaPetStats[pet.baseId.toI32()][3]);
+	pet.name = metaPets[pet.baseId.toI32()];
 
 	pet.save();
 

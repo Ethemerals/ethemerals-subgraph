@@ -152,6 +152,7 @@ type Pet @entity {
 	def: BigInt!
 	spd: BigInt!
 	rarity: BigInt!
+	name: String!
 	metadata: PetMetadata!
 }
 

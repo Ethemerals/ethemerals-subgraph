@@ -1,5 +1,5 @@
 import { Address, BigInt, BigDecimal, log, ethereum, json } from '@graphprotocol/graph-ts';
-import { CoreAction, AccountAction, Transaction, Account, Core } from '../../generated/schema';
+import { AccountAction, Transaction, Account } from '../../generated/schema';
 import { transactionId } from './helpers';
 
 export function ensureTransaction(event: ethereum.Event): Transaction {

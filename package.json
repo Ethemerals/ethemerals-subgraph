@@ -4,10 +4,10 @@
 	"scripts": {
 		"codegen": "graph codegen",
 		"build": "graph build",
-		"deploy": "graph deploy --node https://api.thegraph.com/deploy/ ethemerals/ethemerals",
-		"create-local": "graph create --node http://localhost:8020/ ethemerals/ethemerals",
-		"remove-local": "graph remove --node http://localhost:8020/ ethemerals/ethemerals",
-		"deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 ethemerals/ethemerals"
+		"deploy": "graph deploy --node https://api.thegraph.com/deploy/ ethemerals/ethemerals-v2",
+		"create-local": "graph create --node http://localhost:8020/ ethemerals/ethemerals-v2",
+		"remove-local": "graph remove --node http://localhost:8020/ ethemerals/ethemerals-v2",
+		"deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 ethemerals/ethemerals-v2"
 	},
 	"dependencies": {
 		"@graphprotocol/graph-cli": "0.22.3",

@@ -275,6 +275,7 @@ export class Meral extends Entity {
 
     this.set("tokenId", Value.fromBigInt(BigInt.zero()));
     this.set("meralId", Value.fromBigInt(BigInt.zero()));
+    this.set("type", Value.fromBigInt(BigInt.zero()));
     this.set("timestamp", Value.fromBigInt(BigInt.zero()));
     this.set("blockNumber", Value.fromBigInt(BigInt.zero()));
     this.set("creator", Value.fromString(""));
@@ -349,6 +350,15 @@ export class Meral extends Entity {
 
   set meralId(value: BigInt) {
     this.set("meralId", Value.fromBigInt(value));
+  }
+
+  get type(): BigInt {
+    let value = this.get("type");
+    return value!.toBigInt();
+  }
+
+  set type(value: BigInt) {
+    this.set("type", Value.fromBigInt(value));
   }
 
   get timestamp(): BigInt {

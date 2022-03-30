@@ -31,6 +31,7 @@ type Meral @entity {
 	id: ID!
 	tokenId: BigInt!
 	meralId: BigInt!
+	type: BigInt!
 	timestamp: BigInt!
 	blockNumber: BigInt!
 	creator: Account!

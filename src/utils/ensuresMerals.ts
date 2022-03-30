@@ -18,6 +18,7 @@ export function ensureMeral(event: ethereum.Event, tokenId: BigInt): Meral {
 	meral = new Meral(id);
 	meral.tokenId = tokenId;
 	meral.meralId = getIdFromType(ONE_BI, tokenId);
+	meral.type = ONE_BI;
 	meral.timestamp = event.block.timestamp;
 	meral.blockNumber = event.block.number;
 	meral.creator = ADDRESS_ZERO;

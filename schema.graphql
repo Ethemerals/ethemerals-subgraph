@@ -67,6 +67,8 @@ type Meral @entity {
 	actions: [MeralAction!] @derivedFrom(field: "meral")
 	#
 	burnt: Boolean!
+	status: BigInt!
+	proxy: Boolean!
 }
 
 type Metadata @entity {
@@ -119,6 +121,7 @@ type MeralAction @entity {
 	timestamp: BigInt!
 	transaction: Transaction!
 	type: ActionType!
+	description: String
 }
 
 type AccountAction @entity {
@@ -129,6 +132,7 @@ type AccountAction @entity {
 	timestamp: BigInt!
 	transaction: Transaction!
 	type: ActionType!
+	description: String
 }
 
 ##############################
@@ -165,10 +169,11 @@ type PetAction @entity {
 	timestamp: BigInt!
 	transaction: Transaction!
 	type: ActionType!
+	description: String
 }
 
 ##############################
-##         Wilds              ##
+##         Wilds            ##
 ##############################
 
 ##############################

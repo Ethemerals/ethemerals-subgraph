@@ -53,6 +53,8 @@ export function ensureMeral(event: ethereum.Event, tokenId: BigInt): Meral {
 	meral.metadata = ensureMetadata(meral.cmId).id;
 
 	meral.burnt = false;
+	meral.status = BigInt.fromI32(2);
+	meral.proxy = false;
 
 	meral.save();
 

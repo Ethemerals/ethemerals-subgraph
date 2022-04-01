@@ -25,41 +25,55 @@ export function handleTransfer(event: Transfer): void {
 
 	/// ITS A PET
 	let token = ensurePet(event, event.params.tokenId);
-	// TOKEN ACTIONS
 	let tokenAction = ensurePetAction(event, token.id);
-	tokenAction.type = 'Transfer';
+
 	// NORMAL TRANSFER TO
 	let accountTo = ensureAccount(event, addressId(event.params.to));
 	let accountToAction = ensureAccountAction(event, accountTo.id);
-	accountToAction.type = 'Receive';
-	accountToAction.pet = token.id;
+
 	// NORMAL TRANSFER FROM
 	let accountFrom = ensureAccount(event, addressId(event.params.from));
 	let accountFromAction = ensureAccountAction(event, accountFrom.id);
+
+	tokenAction.type = 'Transfer';
+	tokenAction.description = `Transfered from ${accountFrom.id}`;
+
+	accountToAction.type = 'Receive';
+	accountToAction.description = `Received Pet ${token.tokenId} from ${accountFrom.id}`;
+
 	accountFromAction.type = 'Send';
-	accountFromAction.pet = token.id;
+	accountFromAction.description = `Sent Pet ${token.tokenId} to ${accountTo.id}`;
+
 	// TO DELEGATE
 	// ORDER OF ACTION
 	token.previousOwner = accountFrom.id;
-	accountToAction.pet = token.id;
-	accountFromAction.pet = token.id;
 	token.owner = addressId(event.params.to);
+
 	if (accountFrom.id == ADDRESS_ZERO) {
 		token.previousOwner = ADDRESS_ZERO;
 		token.creator = accountTo.id;
 		token.owner = accountTo.id;
 		tokenAction.type = 'Minted';
+
 		let metadata = ensurePetMetadata(token.baseId);
+		let meral = ensureMeral(event, event.params.tokenId);
+		let meralAction = ensureMeralAction(event, meral.id);
+
 		metadata.editionCount = metadata.editionCount.plus(ONE_BI);
 		token.edition = metadata.editionCount;
 		metadata.save();
-		let meral = ensureMeral(event, event.params.tokenId);
+
 		meral.petRedeemed = true;
-		let meralAction = ensureMeralAction(event, meral.id);
-		meralAction.type = 'RedeemPet';
 		meral.save();
+
+		meralAction.type = 'RedeemPet';
+		meralAction.description = `Summoned Pet`;
 		meralAction.save();
+
+		accountToAction.type = 'Minted';
+		accountToAction.description = `Minted Pet #${token.tokenId}`;
 	}
+
 	accountTo.save();
 	accountFrom.save();
 	accountFromAction.save();

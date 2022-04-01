@@ -27,19 +27,21 @@ export function handleStakeCanceled(event: StakeCanceled): void {
 	let tokenAction = ensureMeralAction(event, token.id);
 	tokenAction.type = 'Unstaked';
 	tokenAction.staked = false;
+	tokenAction.description = `Return from Eternal Battle`;
 
 	if (event.params.win) {
 		tokenScorecard.wins = tokenScorecard.wins.plus(ONE_BI);
-		tokenScorecard.save();
 	}
 
 	let account = ensureAccount(event, token.owner);
 	let accountAction = ensureAccountAction(event, account.id);
 	accountAction.type = 'Unstaked';
 	accountAction.meral = token.id;
+	accountAction.description = `Retrieve ${token.tokenId} from Eternal Battle`;
 
 	tokenAction.save();
 	accountAction.save();
+	tokenScorecard.save();
 }
 
 export function handleStakeCreated(event: StakeCreated): void {
@@ -57,6 +59,11 @@ export function handleStakeCreated(event: StakeCreated): void {
 	let accountAction = ensureAccountAction(event, account.id);
 	accountAction.meral = token.id;
 	accountAction.type = 'Staked';
+
+	tokenAction.type = 'Staked';
+	tokenAction.description = `Enter the Eternal Battle`;
+	accountAction.type = 'Staked';
+	accountAction.description = `Sent ${token.tokenId} to Eternal Battle`;
 
 	tokenAction.save();
 	tokenScorecard.save();
@@ -78,6 +85,7 @@ export function handleTokenRevived(event: TokenRevived): void {
 		let accountAction = ensureAccountAction(event, account.id);
 		accountAction.type = 'Revived';
 		accountAction.meral = token.id;
+		accountAction.description = `Received ${token.tokenId} from Eternal Battle`;
 		accountAction.save();
 	}
 
@@ -86,8 +94,12 @@ export function handleTokenRevived(event: TokenRevived): void {
 	accountReviverAction.meral = tokenReviver.id;
 
 	tokenAction.type = 'Revived';
+	tokenAction.description = `Revived from Eternal Battle`;
 	tokenReviverAction.type = 'Reviver';
+	tokenReviverAction.description = `Revived ${token.tokenId} from Eternal Battle`;
 	accountReviverAction.type = 'Reviver';
+	accountReviverAction.description = `Revived ${token.tokenId} from Eternal Battle`;
+
 	tokenScorecard.revived = tokenScorecard.revived.plus(ONE_BI);
 	tokenReviverScorecard.reviver = tokenReviverScorecard.reviver.plus(ONE_BI);
 

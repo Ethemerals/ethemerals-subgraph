@@ -306,6 +306,8 @@ export class Meral extends Entity {
     this.set("scorecard", Value.fromString(""));
     this.set("metadata", Value.fromString(""));
     this.set("burnt", Value.fromBoolean(false));
+    this.set("status", Value.fromBigInt(BigInt.zero()));
+    this.set("proxy", Value.fromBoolean(false));
   }
 
   save(): void {
@@ -646,6 +648,24 @@ export class Meral extends Entity {
 
   set burnt(value: boolean) {
     this.set("burnt", Value.fromBoolean(value));
+  }
+
+  get status(): BigInt {
+    let value = this.get("status");
+    return value!.toBigInt();
+  }
+
+  set status(value: BigInt) {
+    this.set("status", Value.fromBigInt(value));
+  }
+
+  get proxy(): boolean {
+    let value = this.get("proxy");
+    return value!.toBoolean();
+  }
+
+  set proxy(value: boolean) {
+    this.set("proxy", Value.fromBoolean(value));
   }
 }
 
@@ -1183,6 +1203,23 @@ export class MeralAction extends Entity {
   set type(value: string) {
     this.set("type", Value.fromString(value));
   }
+
+  get description(): string | null {
+    let value = this.get("description");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set description(value: string | null) {
+    if (!value) {
+      this.unset("description");
+    } else {
+      this.set("description", Value.fromString(<string>value));
+    }
+  }
 }
 
 export class AccountAction extends Entity {
@@ -1290,6 +1327,23 @@ export class AccountAction extends Entity {
 
   set type(value: string) {
     this.set("type", Value.fromString(value));
+  }
+
+  get description(): string | null {
+    let value = this.get("description");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set description(value: string | null) {
+    if (!value) {
+      this.unset("description");
+    } else {
+      this.set("description", Value.fromString(<string>value));
+    }
   }
 }
 
@@ -1606,6 +1660,23 @@ export class PetAction extends Entity {
 
   set type(value: string) {
     this.set("type", Value.fromString(value));
+  }
+
+  get description(): string | null {
+    let value = this.get("description");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set description(value: string | null) {
+    if (!value) {
+      this.unset("description");
+    } else {
+      this.set("description", Value.fromString(<string>value));
+    }
   }
 }
 

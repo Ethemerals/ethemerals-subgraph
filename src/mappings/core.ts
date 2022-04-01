@@ -4,7 +4,7 @@ import { addressId, transactionId } from '../utils/helpers';
 import { ensureAccount, ensureAccountAction, ensureCore, ensureDelegate, ensureOperator } from '../utils/ensuresAccount';
 import { ensureMeral, ensureMeralAction, ensureMetadata, ensureScorecard } from '../utils/ensuresMerals';
 
-import { ADDRESS_ZERO, ZERO_BI, ZERO_BD, ONE_BI, TEN_BI, INI_SCORE, CORE_ADDRESS } from '../utils/constants';
+import { ADDRESS_ZERO, ZERO_BI, ZERO_BD, ONE_BI, TEN_BI, INI_SCORE, CORE_ADDRESS, ETERNALBATTLE_ADDRESS, BURN_ADDRESS } from '../utils/constants';
 import { Approval, ApprovalForAll, OwnershipTransferred, DelegateChange, PriceChange, AllowDelegatesChange, Transfer, Mint, ChangeRewards, ChangeScore } from '../../generated/Ethemerals/Ethemerals';
 
 import { Account, AccountAction, Core } from '../../generated/schema';
@@ -74,32 +74,72 @@ export function handleTransfer(event: Transfer): void {
 		return;
 	}
 	let token = ensureMeral(event, event.params.tokenId);
-	// TOKEN ACTIONS
 	let tokenAction = ensureMeralAction(event, token.id);
-	tokenAction.type = 'Transfer';
+
 	// NORMAL TRANSFER TO
 	let accountTo = ensureAccount(event, addressId(event.params.to));
 	let accountToAction = ensureAccountAction(event, accountTo.id);
-	accountToAction.type = 'Receive';
-	accountToAction.meral = token.id;
+
 	// NORMAL TRANSFER FROM
 	let accountFrom = ensureAccount(event, addressId(event.params.from));
 	let accountFromAction = ensureAccountAction(event, accountFrom.id);
+
+	tokenAction.type = 'Transfer';
+	tokenAction.description = `Transfered from ${accountFrom.id}`;
+
+	accountToAction.type = 'Receive';
+	accountToAction.description = `Received ${token.tokenId} from ${accountFrom.id}`;
+
 	accountFromAction.type = 'Send';
-	accountFromAction.meral = token.id;
-	// TO DELEGATE
+	accountFromAction.description = `Sent ${token.tokenId} to ${accountTo.id}`;
+
 	// ORDER OF ACTION
 	token.previousOwner = accountFrom.id;
-	accountToAction.meral = token.id;
-	accountFromAction.meral = token.id;
 	token.owner = addressId(event.params.to);
+
 	// MINT
 	if (accountFrom.id == ADDRESS_ZERO) {
 		token.previousOwner = ADDRESS_ZERO;
 		token.creator = accountTo.id;
 		token.owner = accountTo.id;
+		token.status = BigInt.fromI32(2);
 		tokenAction.type = 'Minted';
+		tokenAction.description = `Birthed by ${accountTo.id}`;
+		accountToAction.type = 'Minted';
+		accountToAction.description = `Minted Meral #${token.tokenId}`;
 	}
+
+	// BURN
+	if (accountTo.id == ADDRESS_ZERO) {
+		token.owner = accountTo.id;
+		token.status = ZERO_BI;
+		token.burnt = true;
+		accountFromAction.type = 'Burnt';
+		accountFromAction.description = `Burnt Meral #${token.tokenId}`;
+	}
+
+	// UNSTAKE ETERNAL BATTLE
+	if (accountFrom.id == ETERNALBATTLE_ADDRESS) {
+		tokenAction.type = 'Unstaked';
+		tokenAction.description = `Return from Eternal Battle`;
+		accountToAction.type = 'Unstaked';
+		accountToAction.description = `Retrieve ${token.tokenId} from Eternal Battle`;
+	}
+
+	// STAKE ETERNAL BATTLE
+	if (accountTo.id == ETERNALBATTLE_ADDRESS) {
+		tokenAction.type = 'Staked';
+		tokenAction.description = `Enter the Eternal Battle`;
+		accountFromAction.type = 'Staked';
+		accountFromAction.description = `Sent ${token.tokenId} to Eternal Battle`;
+	}
+
+	// BURN ADDRESS
+	if (accountTo.id == BURN_ADDRESS) {
+		accountFromAction.type = 'Burnt';
+		accountFromAction.description = `Burnt Meral #${token.tokenId}`;
+	}
+
 	accountTo.save();
 	accountFrom.save();
 	accountFromAction.save();
@@ -112,7 +152,6 @@ export function handleMint(event: Mint): void {
 	let token = ensureMeral(event, event.params.id);
 	let metadata = ensureMetadata(token.cmId);
 	let scorecard = ensureScorecard(token.id);
-	let tokenAction = ensureMeralAction(event, token.id);
 
 	if (metadata) {
 		let meralArray = metadata.merals;
@@ -204,14 +243,13 @@ export function handleMint(event: Mint): void {
 		token.spd = token.spd.plus(BigInt.fromI32(80));
 	}
 
-	tokenAction.type = 'Minted';
 	// save edition
 	metadata.editionCount = metadata.editionCount.plus(ONE_BI);
 	token.edition = metadata.editionCount;
 	// save elf rewards
 	scorecard.highestRewards = token.elf;
+
 	token.save();
-	tokenAction.save();
 	metadata.save();
 	scorecard.save();
 
